@@ -230,9 +230,17 @@ Implement the `invoke(payload, context)` function:
 
 ```bash
 # Configure the AgentCore CLI (first time only)
-agentcore configure
 
+agentcore create 
+#follow the interactive wizard to complete
+
+#Deploy locally
+agentcore dev --no-browser --logs
+
+#Test locally
+agentcore dev --prompt "Can you track my order ORD-002"
 # Deploy the agent
+agentcore deploy --dry-run 
 agentcore deploy
 
 # Invoke the deployed agent
@@ -303,15 +311,36 @@ agentcore invoke '{"prompt": "Go to https://www.amazon.com and tell me the page 
 
 ---
 
-## Submission Checklist
+## Demonstrations and evidence
 
-- [ ] `main.py` with all TODOs completed
-- [ ] Screenshots or terminal output for all 6 test scenarios
-- [ ] Screenshot of the CloudWatch alarm configuration
-- [ ] Brief written reflection (200–400 words) covering:
-  - One design decision you made and why
-  - One challenge you encountered and how you solved it
-  - How you would extend this agent for a production environment
+| Scenario | Evidence | What to inspect |
+| --- | --- | --- |
+| Order tracking | [Test 1](screenshots/test_1.JPG) | Shipment status, carrier, and tracking number |
+| Refund processing | [Test 2](screenshots/test_2.JPG) | Gateway-backed refund response and generated ID |
+| Knowledge retrieval | [Test 3](screenshots/test_3.JPG) | Catalog-backed Platinum benefits |
+| Cross-session memory | [Test 4A](screenshots/test_4a.JPG), [Test 4B](screenshots/test_4b.png) | Recall of Jane's name and preference; inspect the prompt shown in each capture |
+| Loyalty calculation | [Test 5](screenshots/test_5.JPG) | Points redemption, tier discount, final total, and remaining points |
+| Browser automation | [Test 6](screenshots/test_6.JPG) | Retrieved Udacity page title |
+
+These are manual integration demonstrations, not a load-test report or an automated regression suite. Some captures also show limitations worth addressing: a simulated refund defaults to $0 when an amount is omitted, and remembered context can distract the model from the current request. Review approval establishes completion of the capstone requirements; it does not replace production validation.
+
+To reproduce the memory scenario, introduce yourself in one request and ask for recall in another, keeping the same `customer_id` while the `session_id` changes. Considering I used the new agentcore CLI, run the below to attach the created agentcore memory to my agentcore runtime.
+
+```bash
+
+agentcore import memory --arn <memory-arn> --name <memory-name>
+```
+---
+
+## My Reflection
+
+This exercise reinforced that building AI agents in production environments is often less about writing the agent logic itself and more about understanding the surrounding infrastructure, tooling, and integration points. I spent significant time troubleshooting environment issues, runtime configurations, Python version compatibility, AWS permissions, API Gateway integrations, Lambda deployments, and AgentCore configuration. While these challenges were sometimes frustrating, they gave me a much deeper understanding of how the different components interact.
+
+One key lesson was the importance of systematically isolating problems. Rather than assuming the issue was with my code, I learned to validate each layer independently. For example, when AgentCore was failing due to a SQLite error, I verified Python versions, tested imports directly, confirmed SQLite availability, and eventually identified that AgentCore was launching a different interpreter than my virtual environment. Similarly, when working with Gateway and Lambda integrations, I learned to distinguish between configuration issues, IAM permission issues, and application logic issues.
+
+The exercise also highlighted the value of understanding the development lifecycle beyond coding. I gained hands-on experience creating and deploying Lambda functions, configuring API Gateway resources and operations, working with AgentCore Gateway targets, setting up memory services, and testing local versus deployed runtimes. These are practical skills that are essential for moving AI agents from prototypes into real-world systems.
+
+Perhaps the biggest takeaway was developing persistence and troubleshooting discipline. Many of the issues were not solved by a single fix but by carefully gathering evidence, testing assumptions, and narrowing down possibilities. By the end of the exercise, I felt much more confident navigating AWS services, AgentCore tooling, and complex debugging scenarios than when I started.
 
 ---
 
