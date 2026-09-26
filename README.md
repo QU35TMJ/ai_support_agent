@@ -332,7 +332,7 @@ agentcore import memory --arn <memory-arn> --name <memory-name>
 ```
 ---
 
-## My Reflection
+## Troubleshooting and Lessons
 
 This exercise reinforced that building AI agents in production environments is often less about writing the agent logic itself and more about understanding the surrounding infrastructure, tooling, and integration points. I spent significant time troubleshooting environment issues, runtime configurations, Python version compatibility, AWS permissions, API Gateway integrations, Lambda deployments, and AgentCore configuration. While these challenges were sometimes frustrating, they gave me a much deeper understanding of how the different components interact.
 
@@ -341,6 +341,16 @@ One key lesson was the importance of systematically isolating problems. Rather t
 The exercise also highlighted the value of understanding the development lifecycle beyond coding. I gained hands-on experience creating and deploying Lambda functions, configuring API Gateway resources and operations, working with AgentCore Gateway targets, setting up memory services, and testing local versus deployed runtimes. These are practical skills that are essential for moving AI agents from prototypes into real-world systems.
 
 Perhaps the biggest takeaway was developing persistence and troubleshooting discipline. Many of the issues were not solved by a single fix but by carefully gathering evidence, testing assumptions, and narrowing down possibilities. By the end of the exercise, I felt much more confident navigating AWS services, AgentCore tooling, and complex debugging scenarios than when I started.
+
+---
+
+## My Reflection
+
+One design decision I made was to use a session-based approach for the agent by including a session_id in requests. This decision was important because the exercise involved AgentCore Memory, and maintaining a consistent session allows conversations and customer interactions to be linked across multiple requests. Using session identifiers also aligns with how production AI agents maintain context and provide a more personalized user experience. Additionally, I structured the agent to access customer, order, and refund information through Gateway tools rather than hardcoding business logic, making the solution more modular and extensible.
+
+One challenge I encountered was troubleshooting the local development environment. While running the agent with agentcore dev, I repeatedly received a ModuleNotFoundError: No module named '_sqlite3' error. Initially, I assumed the issue was related to my code or dependencies, but after systematically testing different Python versions, I discovered that the system's Python 3.13 installation lacked SQLite support. I verified that SQLite worked correctly in Python 3.10 and that the agent could start successfully using Uvicorn directly. By tracing the runtime behavior and comparing environments, I determined that AgentCore was launching a different Python interpreter than the one in my virtual environment. This experience reinforced the importance of isolating issues and validating assumptions when debugging complex systems.
+
+For a production environment, I would extend this agent in several ways. First, I would integrate authentication and authorization to ensure customer data is accessed securely. Second, I would enhance memory capabilities to maintain longer-term customer context and interaction history. I would also implement monitoring, logging, and alerting through services such as CloudWatch to improve observability and operational support. Finally, I would introduce automated testing, CI/CD pipelines, and infrastructure-as-code to support reliable deployments and simplify ongoing maintenance as the solution scales.
 
 ---
 
