@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # AgentCore Project
 
 This project was created with the [AgentCore CLI](https://github.com/aws/agentcore-cli).
@@ -67,12 +66,12 @@ Enable the following models in the Amazon Bedrock console under **Model access**
 - **Amazon Nova Lite** (`amazon.nova-lite-v1:0`)
 
 ---
->>>>>>> 2b9d04d3f297804b3fb06adb813dd67733a753dc
+
 
 ## Project Structure
 
 ```
-<<<<<<< HEAD
+
 my-project/
 ├── AGENTS.md               # AI coding assistant context
 ├── agentcore/
@@ -174,7 +173,8 @@ The project uses a **flat resource model** — agents, memories, credentials, ga
 - [AgentCore CLI](https://github.com/aws/agentcore-cli)
 - [AgentCore CDK Constructs](https://github.com/aws/agentcore-l3-cdk-constructs)
 - [Amazon Bedrock AgentCore](https://aws.amazon.com/bedrock/agentcore/)
-=======
+
+```
 project/
 ├── INSTRUCTIONS.md          ← this file
 ├── RUBRIC.md                ← grading criteria
@@ -348,8 +348,10 @@ agentcore dev --no-browser --logs
 
 #Test locally
 agentcore dev --prompt "Can you track my order ORD-002"
+
 # Deploy the agent
 agentcore deploy --dry-run 
+
 agentcore deploy
 
 # Invoke the deployed agent
@@ -447,4 +449,4 @@ agentcore import memory --arn <memory-arn> --name <memory-name>
 - [Strands Agents Documentation](https://strandsagents.com)
 - [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
 - [uv Package Manager](https://docs.astral.sh/uv/)
->>>>>>> 2b9d04d3f297804b3fb06adb813dd67733a753dc
+
