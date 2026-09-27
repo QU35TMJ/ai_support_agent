@@ -315,12 +315,12 @@ agentcore invoke '{"prompt": "Go to https://www.amazon.com and tell me the page 
 
 | Scenario | Evidence | What to inspect |
 | --- | --- | --- |
-| Order tracking | [Test 1](screenshots/test_1.JPG) | Shipment status, carrier, and tracking number |
-| Refund processing | [Test 2](screenshots/test_2.JPG) | Gateway-backed refund response and generated ID |
-| Knowledge retrieval | [Test 3](screenshots/test_3.JPG) | Catalog-backed Platinum benefits |
-| Cross-session memory | [Test 4A](screenshots/test_4a.JPG), [Test 4B](screenshots/test_4b.png) | Recall of Jane's name and preference; inspect the prompt shown in each capture |
-| Loyalty calculation | [Test 5](screenshots/test_5.JPG) | Points redemption, tier discount, final total, and remaining points |
-| Browser automation | [Test 6](screenshots/test_6.JPG) | Retrieved Udacity page title |
+| Order tracking | [Test 1](screenshots/test1.JPG) | Shipment status, carrier, and tracking number |
+| Refund processing | [Test 2](screenshots/test2.JPG) | Gateway-backed refund response and generated ID |
+| Knowledge retrieval | [Test 3](screenshots/test3.JPG) | Catalog-backed Platinum benefits |
+| Cross-session memory | [Test 4A](screenshots/test4a.JPG), [Test 4B](screenshots/test4b.png) | Recall of Jane's name and preference; inspect the prompt shown in each capture |
+| Loyalty calculation | [Test 5](screenshots/test5.JPG) | Points redemption, tier discount, final total, and remaining points |
+| Browser automation | [Test 6](screenshots/test6.JPG) | Retrieved Udacity page title |
 
 These are manual integration demonstrations, not a load-test report or an automated regression suite. Some captures also show limitations worth addressing: a simulated refund defaults to $0 when an amount is omitted, and remembered context can distract the model from the current request. Review approval establishes completion of the capstone requirements; it does not replace production validation.
 
@@ -330,28 +330,6 @@ To reproduce the memory scenario, introduce yourself in one request and ask for 
 
 agentcore import memory --arn <memory-arn> --name <memory-name>
 ```
----
-
-## Troubleshooting and Lessons
-
-This exercise reinforced that building AI agents in production environments is often less about writing the agent logic itself and more about understanding the surrounding infrastructure, tooling, and integration points. I spent significant time troubleshooting environment issues, runtime configurations, Python version compatibility, AWS permissions, API Gateway integrations, Lambda deployments, and AgentCore configuration. While these challenges were sometimes frustrating, they gave me a much deeper understanding of how the different components interact.
-
-One key lesson was the importance of systematically isolating problems. Rather than assuming the issue was with my code, I learned to validate each layer independently. For example, when AgentCore was failing due to a SQLite error, I verified Python versions, tested imports directly, confirmed SQLite availability, and eventually identified that AgentCore was launching a different interpreter than my virtual environment. Similarly, when working with Gateway and Lambda integrations, I learned to distinguish between configuration issues, IAM permission issues, and application logic issues.
-
-The exercise also highlighted the value of understanding the development lifecycle beyond coding. I gained hands-on experience creating and deploying Lambda functions, configuring API Gateway resources and operations, working with AgentCore Gateway targets, setting up memory services, and testing local versus deployed runtimes. These are practical skills that are essential for moving AI agents from prototypes into real-world systems.
-
-Perhaps the biggest takeaway was developing persistence and troubleshooting discipline. Many of the issues were not solved by a single fix but by carefully gathering evidence, testing assumptions, and narrowing down possibilities. By the end of the exercise, I felt much more confident navigating AWS services, AgentCore tooling, and complex debugging scenarios than when I started.
-
----
-
-## My Reflection
-
-One design decision I made was to use a session-based approach for the agent by including a session_id in requests. This decision was important because the exercise involved AgentCore Memory, and maintaining a consistent session allows conversations and customer interactions to be linked across multiple requests. Using session identifiers also aligns with how production AI agents maintain context and provide a more personalized user experience. Additionally, I structured the agent to access customer, order, and refund information through Gateway tools rather than hardcoding business logic, making the solution more modular and extensible.
-
-One challenge I encountered was troubleshooting the local development environment. While running the agent with agentcore dev, I repeatedly received a ModuleNotFoundError: No module named '_sqlite3' error. Initially, I assumed the issue was related to my code or dependencies, but after systematically testing different Python versions, I discovered that the system's Python 3.13 installation lacked SQLite support. I verified that SQLite worked correctly in Python 3.10 and that the agent could start successfully using Uvicorn directly. By tracing the runtime behavior and comparing environments, I determined that AgentCore was launching a different Python interpreter than the one in my virtual environment. This experience reinforced the importance of isolating issues and validating assumptions when debugging complex systems.
-
-For a production environment, I would extend this agent in several ways. First, I would integrate authentication and authorization to ensure customer data is accessed securely. Second, I would enhance memory capabilities to maintain longer-term customer context and interaction history. I would also implement monitoring, logging, and alerting through services such as CloudWatch to improve observability and operational support. Finally, I would introduce automated testing, CI/CD pipelines, and infrastructure-as-code to support reliable deployments and simplify ongoing maintenance as the solution scales.
-
 ---
 
 ## Helpful References
