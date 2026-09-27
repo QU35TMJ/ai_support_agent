@@ -1,3 +1,23 @@
 {
-  "targets": {}
+  "targets": {
+    "default": {
+      "resources": {
+        "runtimes": {
+          "csaiAgent": {
+            "runtimeId": "csai_csaiAgent-mpXcEW5eHR",
+            "runtimeArn": "arn:aws:bedrock-agentcore:us-east-1:857840669161:runtime/csai_csaiAgent-mpXcEW5eHR",
+            "roleArn": "arn:aws:iam::857840669161:role/AgentCore-csai-default-ApplicationAgentCsaiAgentRun-mv3uk9a4VUBj"
+          }
+        },
+        "memories": {
+          "CustomerSupportMemory": {
+            "memoryId": "CustomerSupportMemory-MOQmVi5qXY",
+            "memoryArn": "arn:aws:bedrock-agentcore:us-east-1:857840669161:memory/CustomerSupportMemory-MOQmVi5qXY"
+          }
+        },
+        "stackName": "AgentCore-csai-default",
+        "deployHash": "23eb181f02263795"
+      }
+    }
+  }
 }
